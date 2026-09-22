@@ -1,0 +1,43 @@
+{
+  "_note": "Synthetic `jev mail` output for dry-running scripts/render_triage.py - not a real run; every field is invented.",
+  "summary": {
+    "messages": 5,
+    "lanes": {"needs_reply": 2, "updates": 3, "promotional": 0, "sales": 0, "spam": 0, "unsorted": 0},
+    "needs_attention": 1,
+    "unsure": [],
+    "not_sent_to_jev": 0,
+    "latency_ms": {"p50": 1800, "p90": 2000},
+    "cost": {"usd": 0.0002}
+  },
+  "messages": [
+    {
+      "lane": "needs_reply", "urgency": 3.11, "needs_attention": false, "confidence": 0.93,
+      "reason": "needs_reply, urgency 3.1/5",
+      "subject": "Re: Thursday client visit", "sender": "Dana Cole <dana@example.com>",
+      "received": "2026-09-23 10:12", "id": "m1"
+    },
+    {
+      "lane": "updates", "urgency": 4.19, "needs_attention": true, "confidence": 0.93,
+      "reason": "updates, urgency 4.2/5, urgent mass 0.94",
+      "subject": "Approval task: purchase request - office equipment",
+      "sender": "Approval Bot <no-reply@example.com>", "received": "2026-09-23 09:40", "id": "m2"
+    },
+    {
+      "lane": "needs_reply", "urgency": 1.05, "needs_attention": false, "confidence": 0.93,
+      "reason": "needs_reply, urgency 1.1/5, no-time-pressure mass 0.97",
+      "subject": "Team chat", "sender": "Sam", "received": "2026-09-22 22:31", "id": "m3"
+    },
+    {
+      "lane": "updates", "urgency": 1.0, "needs_attention": false, "confidence": 0.9,
+      "reason": "updates, urgency 1.0/5",
+      "subject": "Your order has shipped (5521)", "sender": "ACME Store <orders@shop.example>",
+      "received": "2026-09-22 18:05", "id": "m4"
+    },
+    {
+      "lane": "updates", "urgency": 1.5, "needs_attention": false, "confidence": 0.9,
+      "reason": "updates, urgency 1.5/5",
+      "subject": "周报提醒：本周五前提交", "sender": "行政小助手 <noreply@example.com>",
+      "received": "2026-09-22 09:00", "id": "m5"
+    }
+  ]
+}

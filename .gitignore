@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+inbox.json
+triage.json
+report.md
+.DS_Store

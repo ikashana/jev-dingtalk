@@ -1,0 +1,40 @@
+{
+  "_note": "Synthetic sample - every name, address, subject and company here is invented; nothing comes from a real mailbox.",
+  "messages": [
+    {
+      "id": "m1",
+      "subject": "Re: Thursday client visit",
+      "content": "Can we move the client visit to next Wednesday afternoon? Name a time and I'll book the room - they want to meet the team.",
+      "sender": "Dana Cole <dana@example.com>",
+      "received": "2026-09-23 10:12"
+    },
+    {
+      "id": "m2",
+      "subject": "Approval task: purchase request - office equipment",
+      "content": "You have a new approval task. Applicant: Alex Chen. Please process it soon.",
+      "sender": "Approval Bot <no-reply@example.com>",
+      "received": "2026-09-23 09:40"
+    },
+    {
+      "id": "m3",
+      "subject": "Team chat",
+      "content": "haha that place was great - again sometime!",
+      "sender": "Sam",
+      "received": "2026-09-22 22:31"
+    },
+    {
+      "id": "m4",
+      "subject": "Your order has shipped (5521)",
+      "content": "Track it from your account page.",
+      "sender": "ACME Store <orders@shop.example>",
+      "received": "2026-09-22 18:05"
+    },
+    {
+      "id": "m5",
+      "subject": "周报提醒：本周五前提交",
+      "content": "请各位本周五前在系统里提交周报。",
+      "sender": "行政小助手 <noreply@example.com>",
+      "received": "2026-09-22 09:00"
+    }
+  ]
+}
