@@ -1,0 +1,39 @@
+{
+  "_note": "Synthetic `jev triage` output for dry-running scripts/render_chat_triage.py - not a real run; every field is invented.",
+  "summary": {
+    "messages": 3,
+    "routes": {"now": 1, "today": 1, "queue": 1, "ignore": 0},
+    "kinds": {"request": 2, "notice": 1},
+    "confident_share": 0.667,
+    "needs_review": [{"subject": "Team lounge", "route": "queue", "confidence": 0.44}],
+    "not_sent_to_jev": 0,
+    "latency_ms": {"p50": 1800, "p90": 2100},
+    "cost_estimate_usd": 0.00019
+  },
+  "messages": [
+    {
+      "route": "now", "urgency": 3.1, "kind": "request", "confidence": 0.9,
+      "reason": "request, urgency 3.1/4", "automated": false, "sent_to_jev": true,
+      "urgency_confidence": 0.9, "kind_confidence": 0.9,
+      "needs_human": 0.8, "blocked": 0.1, "deadline": 0.9, "actionable": 0.8, "frustrated": 0.1,
+      "latency_ms": 1800, "id": "at:0", "subject": "08-Platform sync",
+      "sender": "Dana Cole", "received": "2026-09-23 00:27", "known_customer": null
+    },
+    {
+      "route": "today", "urgency": 2.4, "kind": "request", "confidence": 0.85,
+      "reason": "request, urgency 2.4/4", "automated": false, "sent_to_jev": true,
+      "urgency_confidence": 0.85, "kind_confidence": 0.8,
+      "needs_human": 0.5, "blocked": 0.2, "deadline": 0.6, "actionable": 0.7, "frustrated": 0.05,
+      "latency_ms": 1900, "id": "conv:0", "subject": "Ops channel",
+      "sender": "Sam", "received": "2026-09-22 18:40", "known_customer": null
+    },
+    {
+      "route": "queue", "urgency": 0.9, "kind": "notice", "confidence": 0.44,
+      "reason": "notice, urgency 0.9/4", "automated": false, "sent_to_jev": true,
+      "urgency_confidence": 0.44, "kind_confidence": 0.7,
+      "needs_human": 0.2, "blocked": 0.0, "deadline": 0.1, "actionable": 0.3, "frustrated": 0.0,
+      "latency_ms": 2100, "id": "at:1", "subject": "Team lounge",
+      "sender": "Sam", "received": "2026-09-22 23:07", "known_customer": null
+    }
+  ]
+}

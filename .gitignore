@@ -3,4 +3,7 @@ __pycache__/
 inbox.json
 triage.json
 report.md
+chat_inbox.json
+chat_triage.json
+chat_report.md
 .DS_Store

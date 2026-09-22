@@ -1,0 +1,36 @@
+{
+  "_note": "Synthetic sample - every name, conversation and message here is invented.",
+  "messages": [
+    {
+      "id": "at:0",
+      "subject": "08-Platform sync",
+      "content": "@you could you take a look at the draft before Friday? The client wants to sign it off.",
+      "sender": "Dana Cole",
+      "received": "2026-09-23 00:27"
+    },
+    {
+      "id": "at:1",
+      "subject": "Team lounge",
+      "content": "@you thanks for the heads-up - enjoy the trip!",
+      "sender": "Sam",
+      "received": "2026-09-22 23:07"
+    },
+    {
+      "id": "conv:0",
+      "subject": "Ops channel",
+      "content": "Dana Cole: The handover doc is one page short - can you add the checklist?\nSam: The template section needs a refresh too, I think.",
+      "sender": "Sam",
+      "received": "2026-09-22 18:40"
+    }
+  ],
+  "unreadable": [
+    {"conversation": "Private DM", "reason": "content is encrypted (ciphertext); the API cannot read it"}
+  ],
+  "meta": {
+    "generated": "2026-09-23 02:40",
+    "days": 7,
+    "mentions": 2,
+    "conversations": 1,
+    "unreadable": 1
+  }
+}
