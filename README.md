@@ -1,43 +1,43 @@
-# jev-dingtalk
+# 钉钉信息 Jev 分拣器（jev-dingtalk）
 
-Triage a **DingTalk** mailbox and its chat with [Jev](https://docs.typesafe.ai): fetch through the `dws` CLI, sort with `jev mail` / `jev triage`, and hand back what needs a reply and what needs a person.
+**简体中文** | [English](README.en.md)
 
-[中文说明](README.zh.md)
+用 [Jev](https://docs.typesafe.ai) 分拣**钉钉邮箱和聊天记录**：通过 `dws` 取数，用 `jev mail` / `jev triage` 分类，交回一张「谁在等回复、谁需要人看一眼」的清单。
 
-## What it does
+## 功能
 
-- Fetches unread DingTalk mail and message bodies via `dws` (dingtalk-workspace-cli), converts them into the JSON `jev mail` reads.
-- Sorts with Jev: `needs_reply` / `updates` / `promotional` / `sales` / `spam`, plus urgency and the flags (`needs_attention`, `low_confidence`, `injection`) that say what a person should look at.
-- Triages chat records the same way: @-mentions and unread conversations through `jev triage` — one row per conversation; encrypted content is never guessed at.
-- **Jev's output is the answer** — no second model pass in the loop. Flags are where a human (or a model) steps in, and nowhere else.
-- Renders a plain markdown report with each row quoting the triaged message (copied locally — searchable back in DingTalk). The scripts are Python standard library only.
-- Marks what you have already dealt with — read conversations (`✓`), your own last word (`✎`) — and what is still pending despite repeat visits (`×N`, `↻`); all from a local state file, no model call. `--new-only` hides the read and answered rows.
+- 经 `dws`（dingtalk-workspace-cli）拉取钉钉未读邮件与正文，转成 `jev mail` 读取的 JSON。
+- 交给 Jev 分拣：`needs_reply` / `updates` / `promotional` / `sales` / `spam`，附紧急度与需要人看的标记（`needs_attention`、`low_confidence`、`injection`）。
+- 聊天记录同款分拣：@我 的消息 + 未读会话走 `jev triage`——一份会话一行；密文内容只标注、不猜测。
+- **分类结果即成品**——链路里没有第二次模型调用；只有被标记的行才需要人或模型介入。
+- 机械渲染 markdown 报告，每行附**被分拣消息原文摘录**（本地直取，方便回钉钉里搜）；脚本只用 Python 标准库。
+- 自动标出**你已经处理过的内容**（会话已全读 `✓`、你最后说话 `✎`）和**老面孔但还未处理**的条目（重复出现 `×N`、会话有新消息 `↻`）——纯本地状态文件，无模型调用；`--new-only` 一键隐去已读/已回的行。
 
-Companion to [`jev-mailbox`](https://github.com/kerpopule/hermes-jev-skills): that skill sorts an export you already have; this one produces the export for DingTalk, plus the field pitfalls that come with it.
+配套 [`jev-mailbox`](https://github.com/kerpopule/hermes-jev-skills)：它给已经导出的邮件分拣，这里补上钉钉的「取数 + 转换」和对应的字段坑。
 
-## Usage
+## 使用
 
 ```bash
-# prerequisites: python3, Node.js (for dws), a Jev API key
-npm install -g dingtalk-workspace-cli     # the dws CLI
-dws auth login -y                         # scan the page it opens; ~30 days
-jev setup-key                             # once
+# 前置：python3、Node.js（装 dws）、一个 Jev API key
+npm install -g dingtalk-workspace-cli     # dws CLI
+dws auth login -y                         # 扫码登录，约 30 天
+jev setup-key                             # 一次性
 
-# fetch + sort
+# 拉取 + 分拣
 python3 scripts/dws_unread_to_jev.py --email you@example.com --size 50 --out inbox.json
 jev mail --file inbox.json > triage.json
 
-# report
+# 出报告
 python3 scripts/render_triage.py --in triage.json --md report.md
 
-# chat records
+# 聊天记录
 python3 scripts/dws_chat_to_jev.py --days 7 --out chat_inbox.json
 jev triage --file chat_inbox.json > chat_triage.json
 python3 scripts/render_chat_triage.py --in chat_triage.json --inbox chat_inbox.json --md chat_report.md
 ```
 
-To use it as an agent skill, copy this folder into your agent's skills directory (Hermes: `$HERMES_HOME/skills/`). `SKILL.md` has the full walkthrough and the DingTalk-specific pitfalls; `examples/` holds synthetic samples you can dry-run the scripts on.
+装到 Agent 里用：把整个文件夹拷进技能目录（Hermes：`$HERMES_HOME/skills/`）。完整流程与钉钉专属的坑看 `SKILL.md`；`examples/` 是合成样张，可直接干跑脚本。
 
-## License
+## 许可
 
 MIT
