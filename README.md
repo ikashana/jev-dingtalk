@@ -11,6 +11,7 @@ Triage a **DingTalk** mailbox and its chat with [Jev](https://docs.typesafe.ai):
 - Triages chat records the same way: @-mentions and unread conversations through `jev triage` — one row per conversation; encrypted content is never guessed at.
 - **Jev's output is the answer** — no second model pass in the loop. Flags are where a human (or a model) steps in, and nowhere else.
 - Renders a plain markdown report with each row quoting the triaged message (copied locally — searchable back in DingTalk). The scripts are Python standard library only.
+- Marks what you have already dealt with — read conversations (`✓`), your own last word (`✎`) — and what is still pending despite repeat visits (`×N`, `↻`); all from a local state file, no model call. `--new-only` hides the read and answered rows.
 
 Companion to [`jev-mailbox`](https://github.com/kerpopule/hermes-jev-skills): that skill sorts an export you already have; this one produces the export for DingTalk, plus the field pitfalls that come with it.
 

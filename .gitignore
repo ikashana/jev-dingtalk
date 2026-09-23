@@ -6,4 +6,5 @@ report.md
 chat_inbox.json
 chat_triage.json
 chat_report.md
+chat_state.json
 .DS_Store

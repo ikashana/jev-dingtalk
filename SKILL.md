@@ -1,7 +1,7 @@
 ---
 name: jev-dingtalk
 description: "Use when triaging DingTalk mail or chat with Jev — fetch through the dws CLI, sort it with jev mail or jev triage, and surface what needs a person. Companion to jev-mailbox."
-version: 0.2.1
+version: 0.3.0
 license: MIT
 metadata:
   hermes:
@@ -74,6 +74,9 @@ Chat notes:
 - **Encrypted messages are real.** Some chat content comes back as ciphertext the API cannot read (private messages in particular). Per-message ciphertext is dropped from transcripts with a count at the end of the row; a conversation with nothing readable lands in the `unreadable` list and is printed as "check manually" — never guessed at, never sent to Jev as noise.
 - One item can surface twice (an @-mention inside an unread conversation) — that is honest, not duplication to chase.
 - The report quotes the triaged message in a `quote` column — a mention quotes itself, a conversation its newest readable line. Copied locally from `chat_inbox.json` by the renderer: no model call, nothing extra sent.
+- **Repeat and read marks — still no model involved.** The converter keeps a small local ledger (`chat_state.json` next to `--out`; move it with `--state PATH`, skip the whole marks layer with `--no-state`) and reads the unread-conversation list as a read-state map, so a row can carry `×N` (seen in N earlier reports), `↻` (new activity since the last report), `✓` (its conversation has nothing unread left) and `✎` (your own message is the newest). `render_chat_triage.py --new-only` hides the read (`✓`) and answered (`✎`) rows — repeats stay, since an unread item that keeps coming back is still pending.
+- The unread list doubles as a read map: a conversation that is not in it has nothing unread left, so an @-mention inside it scores `✓` — one cross-check, no extra calls, and it usually clears most of a week of mentions.
+- The ledger is scratch: delete the file and marks restart; keep it out of git.
 
 ## DingTalk-specific pitfalls
 
@@ -96,4 +99,4 @@ The scripts talk only to DingTalk; what leaves the machine is what `jev mail` an
 
 ## Roadmap
 
-`chat message list-all` (a full time-window sweep, present on tenants with the message-search entitlement) is not wired in yet.
+`chat message list-all` (a full time-window sweep, present on tenants with the message-search entitlement) is not wired in yet. Per-mention "did I reply" checks (resolving a mention's conversation id via `+conversation-list`, then reading that conversation's newest message) are the next candidate — the read map already covers most of what they would tell you.
