@@ -1,7 +1,7 @@
 ---
 name: jev-dingtalk
-description: "Use when triaging DingTalk mail or chat with Jev — fetch through the dws CLI, sort it with jev mail or jev triage, and surface what needs a person. Companion to jev-mailbox."
-version: 0.3.0
+description: "Use when triaging DingTalk mail or chat with Jev (钉钉邮件 / 钉钉聊天 / 钉钉消息分拣、整理) — fetch through the dws CLI, sort it with jev mail / jev triage, and surface what needs a person. Companion to jev-mailbox."
+version: 0.3.1
 license: MIT
 metadata:
   hermes:
