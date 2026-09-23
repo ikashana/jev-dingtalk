@@ -10,7 +10,7 @@ Triage a **DingTalk** mailbox and its chat with [Jev](https://docs.typesafe.ai):
 - Sorts with Jev: `needs_reply` / `updates` / `promotional` / `sales` / `spam`, plus urgency and the flags (`needs_attention`, `low_confidence`, `injection`) that say what a person should look at.
 - Triages chat records the same way: @-mentions and unread conversations through `jev triage` — one row per conversation; encrypted content is never guessed at.
 - **Jev's output is the answer** — no second model pass in the loop. Flags are where a human (or a model) steps in, and nowhere else.
-- Renders a plain markdown report. The scripts are Python standard library only.
+- Renders a plain markdown report with each row quoting the triaged message (copied locally — searchable back in DingTalk). The scripts are Python standard library only.
 
 Companion to [`jev-mailbox`](https://github.com/kerpopule/hermes-jev-skills): that skill sorts an export you already have; this one produces the export for DingTalk, plus the field pitfalls that come with it.
 

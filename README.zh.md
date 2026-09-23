@@ -10,7 +10,7 @@
 - 交给 Jev 分类：`needs_reply` / `updates` / `promotional` / `sales` / `spam`，附紧急度与需要人看的标记（`needs_attention`、`low_confidence`、`injection`）。
 - 聊天记录同款分诊：@我 的消息 + 未读会话走 `jev triage`——一份会话一行；密文内容只标注、不猜测。
 - **分类结果即成品**——链路里没有第二次模型调用；只有被标记的行才需要人或模型介入。
-- 机械渲染 markdown 报告；脚本只用 Python 标准库。
+- 机械渲染 markdown 报告，每行附**被分诊消息原文摘录**（本地直取，方便回钉钉里搜）；脚本只用 Python 标准库。
 
 配套 [`jev-mailbox`](https://github.com/kerpopule/hermes-jev-skills)：它给已经导出的邮件分拣，这里补上钉钉的「取数 + 转换」和对应的字段坑。
 

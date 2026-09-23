@@ -68,7 +68,7 @@ def clean_text(text):
     text = text.replace("\\n", "\n").replace("\\t", "    ")
     # Media IDs are long base64 runs with no reading value - shorten them so they do not
     # crowd out the message around them (or the truncation window).
-    text = re.sub(r"(mediaId=\$?)([A-Za-z0-9+/=]{24,})",
+    text = re.sub(r"(mediaId=[$@]?)([A-Za-z0-9+/=_-]{24,})",
                   lambda m: m.group(1) + m.group(2)[:12] + "...", text)
     return text.strip()
 

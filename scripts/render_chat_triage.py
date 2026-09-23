@@ -5,9 +5,15 @@
 Mechanical on purpose: it sorts and formats rows, it decides nothing. Standard library only. MIT.
 
     python3 render_chat_triage.py --in chat_triage.json [--inbox chat_inbox.json] [--md report.md] [--top 30]
+
+With `--inbox` (the converter's output) every row also quotes the message it triaged - taken
+locally from the inbox file, no model call, nothing extra sent anywhere.
 """
 import argparse
 import json
+
+QUOTE_TABLE = 64  # characters of the quoted message in the Now / Today tables
+QUOTE_LIST = 44   # characters in the Queue list
 
 
 def clip(value, limit=48):
@@ -25,15 +31,39 @@ def source_of(row):
     return "at" if str(row.get("id") or "").startswith("at:") else "conv"
 
 
-def table_row(row):
-    return (f"| {source_of(row)} | {clip(row.get('subject'))} | {clip(row.get('sender'), 30)} "
-            f"| {row.get('urgency', '')} | {clip(row.get('kind'), 12)} | {when(row.get('received'))} |")
+def quote_of(row, content_by_id):
+    """The line worth searching back for: a mention quotes itself, a conversation its
+    newest readable message. "" when the inbox cannot supply it."""
+    content = content_by_id.get(str(row.get("id") or ""))
+    if not content:
+        return ""
+    lines = [ln.strip() for ln in str(content).split("\n")
+             if ln.strip()
+             and not ln.startswith("[earlier messages trimmed]")
+             and "message(s) in this conversation could not be read]" not in ln]
+    if not lines:
+        return ""
+    line = lines[0] if source_of(row) == "at" else lines[-1]
+    line = " ".join(line.split())
+    sender = str(row.get("sender") or "").strip()
+    if sender and line.startswith(sender + ": "):
+        line = line[len(sender) + 2:]
+    return line
+
+
+def table_row(row, content_by_id=None):
+    line = (f"| {source_of(row)} | {clip(row.get('subject'))} | {clip(row.get('sender'), 30)} "
+            f"| {row.get('urgency', '')} | {clip(row.get('kind'), 12)} | {when(row.get('received'))} ")
+    if content_by_id is not None:
+        line += f"| {clip(quote_of(row, content_by_id), QUOTE_TABLE)} "
+    return line + "|"
 
 
 def main():
     ap = argparse.ArgumentParser(description="render jev triage output for chat as markdown")
     ap.add_argument("--in", dest="src", required=True, help="jev triage output JSON")
-    ap.add_argument("--inbox", dest="inbox", help="the converter's chat_inbox.json (for the unreadable list)")
+    ap.add_argument("--inbox", dest="inbox",
+                    help="the converter's chat_inbox.json - supplies the quote column and the unreadable list")
     ap.add_argument("--md", dest="md", help="write markdown here (default: stdout)")
     ap.add_argument("--top", type=int, default=30, help="cap the queue list (default 30)")
     args = ap.parse_args()
@@ -43,10 +73,12 @@ def main():
     summary = doc.get("summary") or {}
     rows = doc.get("messages") or []
 
-    unreadable = []
+    unreadable, content_by_id = [], None
     if args.inbox:
         with open(args.inbox, encoding="utf-8") as fh:
-            unreadable = (json.load(fh).get("unreadable")) or []
+            inbox = json.load(fh)
+        unreadable = inbox.get("unreadable") or []
+        content_by_id = {str(m.get("id")): m.get("content") for m in (inbox.get("messages") or [])}
 
     now_rows = sorted([m for m in rows if m.get("route") == "now"],
                       key=lambda m: -(m.get("urgency") or 0))
@@ -80,18 +112,28 @@ def main():
         if not items:
             lines.append("- none")
             return
-        lines.append("| src | conversation | from | u | kind | when |")
-        lines.append("|---|---|---|---|---|---|")
+        if content_by_id is not None:
+            lines.append("| src | conversation | from | u | kind | when | quote |")
+            lines.append("|---|---|---|---|---|---|---|")
+        else:
+            lines.append("| src | conversation | from | u | kind | when |")
+            lines.append("|---|---|---|---|---|---|")
         for m in items:
-            lines.append(table_row(m))
+            lines.append(table_row(m, content_by_id))
+
+    def queue(items):
+        for m in items[:args.top]:
+            line = (f"- [{source_of(m)}] {clip(m.get('subject'))} · {clip(m.get('sender'), 24)} "
+                    f"· {clip(m.get('kind'), 12)} · u{m.get('urgency')} · {when(m.get('received'))}")
+            if content_by_id is not None:
+                line += f" · {clip(quote_of(m, content_by_id), QUOTE_LIST)}"
+            lines.append(line)
+        if len(items) > args.top:
+            lines.append(f"- ...and {len(items) - args.top} more")
 
     section("Now", now_rows, table)
     section("Today", today_rows, table)
-    section("Queue", queue_rows, lambda items: (
-        [lines.append(f"- [{source_of(m)}] {clip(m.get('subject'))} · {clip(m.get('sender'), 24)} "
-                      f"· {clip(m.get('kind'), 12)} · u{m.get('urgency')} · {when(m.get('received'))}")
-         for m in items[:args.top]]
-        + ([lines.append(f"- ...and {len(items) - args.top} more")] if len(items) > args.top else [])))
+    section("Queue", queue_rows, queue)
 
     lines.append(f"## Ignore ({len(ignore_rows)})")
     lines.append("")
@@ -113,7 +155,9 @@ def main():
             lines.append(f"- {clip(r.get('subject'))} ({r.get('route', '')}, confidence {r.get('confidence', '')})")
         lines.append("")
 
-    lines.append("_Rendered mechanically from `jev triage` output; routes are code, readings are Jev's._")
+    lines.append("_Quotes are copied locally from the inbox file - a conversation's newest "
+                 "readable line, the mention itself for @-mentions - search them back in DingTalk. "
+                 "Rendered mechanically from `jev triage` output; routes are code, readings are Jev's._")
     lines.append("")
 
     text = "\n".join(lines)
